@@ -1,3 +1,6 @@
+/*
+UPDATED WITH SLAVYSIS CODE 
+*/
 /**
  * @copyright (C) 2017 Melexis N.V.
  *
@@ -18,21 +21,21 @@
 #include <MLX90641_API.h>
 #include <math.h>
 
-void ExtractVDDParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractPTATParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractGainParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractTgcParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractEmissivityParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractResolutionParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractKsTaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractKsToParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractAlphaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractOffsetParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractKtaPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractKvPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
-void ExtractCPParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
+void MLX90641_ExtractVDDParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractPTATParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractGainParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractTgcParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractEmissivityParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractResolutionParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractKsTaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractKsToParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractAlphaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractOffsetParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractKtaPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractKvPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);	
+void MLX90641_ExtractCPParameters(uint16_t *eeData, paramsMLX90641 *mlx90641);
 int ExtractDeviatingPixels(uint16_t *eeData, paramsMLX90641 *mlx90641);
-int CheckEEPROMValid(uint16_t *eeData); 
+//int MLX90641_CheckEEPROMValid(uint16_t *eeData); 
 int HammingDecode(uint16_t *eeData);  
 int ValidateFrameData(uint16_t *frameData);
 int ValidateAuxData(uint16_t *auxData);
@@ -236,12 +239,14 @@ int MLX90641_TriggerMeasurement(uint8_t slaveAddr)
         return error;
     }    
     
-    error = MLX90641_I2CGeneralReset();
+
+    /* error = MLX90641_I2CGeneralReset();
     
     if ( error != 0)
     {
         return error;
-    }    
+    }  
+    */  
     
     error = MLX90641_I2CRead(slaveAddr, 0x800D, 1, &ctrlReg);
     
@@ -435,23 +440,23 @@ int ValidateAuxData(uint16_t *auxData)
 
 int MLX90641_ExtractParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
-    int error = CheckEEPROMValid(eeData);
+    int error = MLX90641_CheckEEPROMValid(eeData);
     
     if(error == 0)
     {
-        ExtractVDDParameters(eeData, mlx90641);
-        ExtractPTATParameters(eeData, mlx90641);
-        ExtractGainParameters(eeData, mlx90641);
-        ExtractTgcParameters(eeData, mlx90641);
-        ExtractEmissivityParameters(eeData, mlx90641);
-        ExtractResolutionParameters(eeData, mlx90641);
-        ExtractKsTaParameters(eeData, mlx90641);
-        ExtractKsToParameters(eeData, mlx90641);
-        ExtractCPParameters(eeData, mlx90641);
-        ExtractAlphaParameters(eeData, mlx90641);
-        ExtractOffsetParameters(eeData, mlx90641);
-        ExtractKtaPixelParameters(eeData, mlx90641);
-        ExtractKvPixelParameters(eeData, mlx90641);        
+        MLX90641_ExtractVDDParameters(eeData, mlx90641);
+        MLX90641_ExtractPTATParameters(eeData, mlx90641);
+        MLX90641_ExtractGainParameters(eeData, mlx90641);
+        MLX90641_ExtractTgcParameters(eeData, mlx90641);
+        MLX90641_ExtractEmissivityParameters(eeData, mlx90641);
+        MLX90641_ExtractResolutionParameters(eeData, mlx90641);
+        MLX90641_ExtractKsTaParameters(eeData, mlx90641);
+        MLX90641_ExtractKsToParameters(eeData, mlx90641);
+        MLX90641_ExtractCPParameters(eeData, mlx90641);
+        MLX90641_ExtractAlphaParameters(eeData, mlx90641);
+        MLX90641_ExtractOffsetParameters(eeData, mlx90641);
+        MLX90641_ExtractKtaPixelParameters(eeData, mlx90641);
+        MLX90641_ExtractKvPixelParameters(eeData, mlx90641);        
         error = ExtractDeviatingPixels(eeData, mlx90641);  
     }
     
@@ -563,14 +568,14 @@ void MLX90641_CalculateTo(uint16_t *frameData, const paramsMLX90641 *params, flo
     subPage = frameData[241];
     vdd = MLX90641_GetVdd(frameData, params);
     ta = MLX90641_GetTa(frameData, params);    
-    ta4 = (ta + 273.15);
+    ta4 = (ta + 273.15);    // ovf error due to serial print. DEBUG: dividing by 100 resolves ovf error for ta4 and tr4 (taTr)
     ta4 = ta4 * ta4;
     ta4 = ta4 * ta4;
     tr4 = (tr + 273.15);
     tr4 = tr4 * tr4;
     tr4 = tr4 * tr4;
-    
-    taTr = tr4 - (tr4-ta4)/emissivity;
+
+    taTr = tr4 - (tr4-ta4)/emissivity; //outputting 81 ish with 100 divisors, should be 9b ish, near 10b
     
     ktaScale = pow(2,(double)params->ktaScale);
     kvScale = pow(2,(double)params->kvScale);
@@ -592,7 +597,7 @@ void MLX90641_CalculateTo(uint16_t *frameData, const paramsMLX90641 *params, flo
         gain = gain - 65536;
     }
     
-    gain = params->gainEE / gain; 
+    gain = params->gainEE / gain; //gain is 0.99 
   
 //------------------------- To calculation -------------------------------------        
     irDataCP = frameData[200];  
@@ -600,9 +605,9 @@ void MLX90641_CalculateTo(uint16_t *frameData, const paramsMLX90641 *params, flo
     {
         irDataCP = irDataCP - 65536;
     }
-    irDataCP = irDataCP * gain;
+    irDataCP = irDataCP * gain; // irDataCP ~  -450.27, -448.10
 
-    irDataCP = irDataCP - params->cpOffset * (1 + params->cpKta * (ta - 25)) * (1 + params->cpKv * (vdd - 3.3));
+    irDataCP = irDataCP - params->cpOffset * (1 + params->cpKta * (ta - 25)) * (1 + params->cpKv * (vdd - 3.3)); // becomes positive ~ 55.79 
     
     for( int pixelNumber = 0; pixelNumber < 192; pixelNumber++)
     {      
@@ -611,25 +616,29 @@ void MLX90641_CalculateTo(uint16_t *frameData, const paramsMLX90641 *params, flo
         {
             irData = irData - 65536;
         }
-        irData = irData * gain;
+        irData = irData * gain; // pass, returns negative values between 200-350 
         
-        kta = (float)params->kta[pixelNumber]/ktaScale;
-        kv = (float)params->kv[pixelNumber]/kvScale;
-            
-        irData = irData - params->offset[subPage][pixelNumber]*(1 + kta*(ta - 25))*(1 + kv*(vdd - 3.3));                
-    
-        irData = irData - params->tgc * irDataCP;
+        kta = (float)params->kta[pixelNumber]/ktaScale; // all zeros???
+        kv = (float)params->kv[pixelNumber]/kvScale; // values between 0.2-0.3 
         
-        irData = irData / emissivity;
+        irData = irData - params->offset[subPage][pixelNumber]*(1 + kta*(ta - 25))*(1 + kv*(vdd - 3.3));        //pass, low values ~10       
         
-        alphaCompensated = SCALEALPHA*alphaScale/params->alpha[pixelNumber];
-        alphaCompensated = alphaCompensated*(1 + params->KsTa * (ta - 25));
+        irData = irData - params->tgc * irDataCP;   // pass, mix of pos/neg values, mostly negative with -12 min and max ~ 1 
         
-        Sx = alphaCompensated * alphaCompensated * alphaCompensated * (irData + alphaCompensated * taTr);
-        Sx = sqrt(sqrt(Sx)) * params->ksTo[2];
+        irData = irData / emissivity;   // implicit pass 
+        
+        alphaCompensated = SCALEALPHA*alphaScale/params->alpha[pixelNumber]; // all zeros 
+        alphaCompensated = alphaCompensated*(1 + params->KsTa * (ta - 25)); // all EXTREMELY SMALL NUMBERS ~ 0.9-1.2 E-7 
+        
+        
+        Sx = alphaCompensated * alphaCompensated * alphaCompensated * irData + alphaCompensated * taTr; // add irData and alpha
+        Sx = sqrt(sqrt(Sx))* params->ksTo[2]; // ksTo[2] seems to be infinite, fixed by hardcoding 2^20 
+        //Note: ksTo[2] and ksTo[3] are used interchangeably in other versions of drivers, but do not seem to have the same value here. If values seem off during testing, swap to ksTo[3]
+        //NOTE: ksTo[2] is for -20 to 0 C range, ksTo[3] is for 0-80 C range 
         
         To = sqrt(sqrt(irData/(alphaCompensated * (1 - params->ksTo[2] * 273.15) + Sx) + taTr)) - 273.15;
-                
+        
+        
         if(To < params->ct[1])
         {
             range = 0;
@@ -661,12 +670,26 @@ void MLX90641_CalculateTo(uint16_t *frameData, const paramsMLX90641 *params, flo
         else
         {
             range = 7;            
-        }      
-        
+        }     
+        //check upper To reference
         To = sqrt(sqrt(irData / (alphaCompensated * alphaCorrR[range] * (1 + params->ksTo[range] * (To - params->ct[range]))) + taTr)) - 273.15;
+        
         
         result[pixelNumber] = To;
     }
+    
+        //result[pixelNumber] = To;
+        
+    /*for(int pixelNumber = 0; pixelNumber < 192; pixelNumber++)
+    { 
+        result[pixelNumber] = taTr; 
+    } */// debugging
+    /*for(int i =0;i<8;i++){
+        result[i] = params->ksTo[i];
+    }*/
+    
+
+    
 }
 
 //------------------------------------------------------------------------------
@@ -837,7 +860,7 @@ void MLX90641_BadPixelsCorrection(uint16_t pixel, float *to)
 }    
 
 //------------------------------------------------------------------------------
-void ExtractVDDParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractVDDParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     int16_t kVdd;
     int16_t vdd25;
@@ -862,7 +885,7 @@ void ExtractVDDParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractPTATParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractPTATParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     float KvPTAT;
     float KtPTAT;
@@ -895,7 +918,7 @@ void ExtractPTATParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractGainParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractGainParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     int16_t gainEE;
     
@@ -906,7 +929,7 @@ void ExtractGainParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractTgcParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractTgcParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     float tgc;
     tgc = eeData[51] & 0x01FF;
@@ -921,7 +944,7 @@ void ExtractTgcParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractEmissivityParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractEmissivityParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     float emissivity;
     emissivity = eeData[35];
@@ -937,7 +960,7 @@ void ExtractEmissivityParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
     
 //------------------------------------------------------------------------------
 
-void ExtractResolutionParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractResolutionParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     uint8_t resolutionEE;
     resolutionEE = (eeData[51] & 0x0600) >> 9;    
@@ -947,7 +970,7 @@ void ExtractResolutionParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractKsTaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractKsTaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     float KsTa;
     KsTa = eeData[34];
@@ -961,8 +984,8 @@ void ExtractKsTaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 }
 
 //------------------------------------------------------------------------------
-
-void ExtractKsToParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+// ksTo values returning inf -> force use of KsTo[3] which is 0-80 C range 
+void MLX90641_ExtractKsToParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     int KsToScale;
     
@@ -994,13 +1017,14 @@ void ExtractKsToParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
         {
             mlx90641->ksTo[i] = mlx90641->ksTo[i] - 2048;
         }
-        mlx90641->ksTo[i] = mlx90641->ksTo[i] / KsToScale;
+        //mlx90641->ksTo[i] = mlx90641->ksTo[i] / KsToScale; 
+        mlx90641->ksTo[i] = mlx90641->ksTo[i] / pow(2,20); // hardcoding KsToScale to 2^20
     } 
 }
 
 //------------------------------------------------------------------------------
 
-void ExtractAlphaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractAlphaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     float rowMaxAlphaNorm[6];
     uint16_t scaleRowAlpha[6];
@@ -1062,7 +1086,7 @@ void ExtractAlphaParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractOffsetParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractOffsetParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     int scaleOffset;
     int16_t offsetRef;
@@ -1097,7 +1121,7 @@ void ExtractOffsetParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractKtaPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractKtaPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     uint8_t ktaScale1;
     uint8_t ktaScale2;
@@ -1163,7 +1187,7 @@ void ExtractKtaPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractKvPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractKvPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     uint8_t kvScale1;
     uint8_t kvScale2;
@@ -1229,7 +1253,7 @@ void ExtractKvPixelParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
 //------------------------------------------------------------------------------
 
-void ExtractCPParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
+void MLX90641_ExtractCPParameters(uint16_t *eeData, paramsMLX90641 *mlx90641)
 {
     float alphaCP;
     int16_t offsetCP;
@@ -1292,32 +1316,36 @@ int ExtractDeviatingPixels(uint16_t *eeData, paramsMLX90641 *mlx90641)
 
     int warn = 0;
     
-    mlx90641->brokenPixel = 0xFFFF;
+    for(pixCnt = 0; pixCnt<2; pixCnt++)	
+    {	
+        mlx90641->brokenPixels[pixCnt] = 0xFFFF;	
+    }
         
-    pixCnt = 0;    
-    while (pixCnt < 192 && brokenPixCnt < 2)
-    {
-        if((eeData[pixCnt+64] == 0) && (eeData[pixCnt+256] == 0) && (eeData[pixCnt+448] == 0) && (eeData[pixCnt+640] == 0))
-        {
-            mlx90641->brokenPixel = pixCnt;
-            brokenPixCnt = brokenPixCnt + 1;
-        }    
-        
-        pixCnt = pixCnt + 1;
-    } 
-    
-    if(brokenPixCnt > 1)  
-    {
-        warn = -3;
-    }         
-    
+    pixCnt = 0;    	
+    while (pixCnt < 192 && brokenPixCnt < 3)	
+    {	
+        if((eeData[pixCnt+64] == 0) && (eeData[pixCnt+256] == 0) && (eeData[pixCnt+448] == 0) && (eeData[pixCnt+640] == 0))	
+        {	
+            mlx90641->brokenPixels[brokenPixCnt] = pixCnt;	
+            brokenPixCnt = brokenPixCnt + 1;	
+        }    	
+        	
+        pixCnt = pixCnt + 1;	
+        	
+    } 	
+    	
+    if(brokenPixCnt > 1)  	
+    {	
+        warn = -3;	
+    }         	
+    	
     return warn;
        
 }
  
  //------------------------------------------------------------------------------
  
- int CheckEEPROMValid(uint16_t *eeData)  
+ int MLX90641_CheckEEPROMValid(uint16_t *eeData)  
  {
      int deviceSelect;
      deviceSelect = eeData[10] & 0x0040;
