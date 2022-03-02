@@ -1,0 +1,24 @@
+#include <AccelStepper.h>
+
+AccelStepper stepper(1,7,6); // defining the connection between the stepper motor driver and Arduino
+
+#define joyX A0 // defines the analog input for the X direction on joystick
+#define joyY A1 // defines the analog input for the Y direction on joystick
+
+void setup()
+{  
+   stepper.setMaxSpeed(1032);	// theoretical maximum speed for stepper motor
+
+   Serial.begin(9600);
+}
+
+void loop()
+{  
+   int xValue = analogRead(joyX); // reading X value from joystick
+   int yValue = analogRead(joyY); // reading Y value from joystick
+   
+   stepper.setSpeed((2*(xValue-508))); // sets stepper motor speed based on X value from joystick
+   stepper.runSpeed(); // runs the stepper motor
+
+   Serial.println((2*(xValue-508))); // sanity check, prints speed values on Serial Monitor
+}
